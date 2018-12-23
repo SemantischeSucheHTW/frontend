@@ -54,18 +54,26 @@
             </b-form-group>
         </b-card>
         </b-collapse>
-        <b-button class="mt-2 float-right" size="lg" variant="primary" @click="getResults">
-            🔎 Suchen
-        </b-button>
-        {{fullQuery}}
+            <b-button class="mt-2" size="lg" variant="primary" @click="getResults">
+                🔎 Suchen
+            </b-button>
+            <ul class="mt-3 pl-2 pr-2 pt-2 pb-2" style="list-style-type: none;">
+                <li v-for="result in results" class="mb-2">
+                    <SearchResult :result="result"></SearchResult>
+                </li>
+            </ul>
     </div>
 </template>
 
 <script>
     import http from './../core/http';
+    import SearchResult from '@/components/SearchResult.vue'
 
     export default {
         name: 'Default',
+        components: {
+            SearchResult: SearchResult
+        },
         computed: {
             fromDateState () {
                 return this.fromActive ? /^[0-9]{4}.[0-9]{2}.[0-9]{2}$/.test(this.fromDate) : null
@@ -87,6 +95,14 @@
                 searchQuery: '',
                 fullQuery: 'bepis',
                 results: [
+                    {
+                        title: 'Mercedes brannte',
+                        date: '22.12.2018',
+                        district: 'Treptow-Köpenick',
+                        number: '2676',
+                        text: 'Heute früh brannte in Baumschulenweg ein Mercedes. Gegen 3.20 Uhr wurden Polizei und Feuerwehr zu dem brennenden Wagen auf einem Feld in der Neuen Späthstraße alarmiert. Brandbekämpfer löschten die Flammen. Der Pkw brannte komplett aus. Die Ermittlungen hat ein Brandkommissariat beim Landeskriminalamt Berlin übernommen.',
+                        link: 'https://www.berlin.de/polizei/polizeimeldungen/pressemitteilung.769783.php'
+                    },
                     {
                         title: 'Auf Männer eingestochen - Festnahme',
                         date: '22.12.2018',
