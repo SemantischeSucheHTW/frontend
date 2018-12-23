@@ -61,12 +61,14 @@
         <b-button class="mt-2" size="lg" variant="primary" @click="getResults">
             🔎 Suchen
         </b-button>
-        {{fullQuery}}
-        <ul class="mt-3 pl-2 pr-2 pt-2 pb-2" style="list-style-type: none;">
+        <ul v-if="results.length > 0" class="mt-3 pl-2 pr-2 pt-2 pb-2" style="list-style-type: none;">
             <li v-for="result in results" class="mb-2">
                 <SearchResult :result="result"></SearchResult>
             </li>
         </ul>
+        <b-alert :show="error" dismissible variant="danger">
+            {{error}}
+        </b-alert>
     </div>
 </template>
 
@@ -99,6 +101,7 @@
                 selectedDistricts: [],
                 searchQuery: '',
                 fullQuery: '',
+                error: false,
                 results: [
                     {
                         title: 'Mercedes brannte',
@@ -122,15 +125,21 @@
         methods: {
             getResults() {
 
-                let isEmpty = (str) => {
-                    return ;
-                };
-
                 this.fullQuery = !(!this.searchQuery || 0 === this.searchQuery.length)? 'q=' + this.searchQuery.split(' ').join('+') : '';
                 this.fullQuery += this.fromDateState ? ('from=' + this.fromDate + '&') : '';
                 this.fullQuery += this.toDateState ? ('from=' + this.toDate + '&') : '';
-                this.fullQuery += this.selectedDistricts.length > 0? ('districts=' + this.selectedDistricts): ''
+                this.fullQuery += this.selectedDistricts.length > 0? ('districts=' + this.selectedDistricts): '';
 
+                if((this.fullQuery.length === 0)) {
+                    return;
+                }
+
+                http.get('/search?' + this.fullQuery).then(response => {
+                    this.error = false;
+                    this.results = response.data;
+                }).catch(error => {
+                    this.error = error;
+                })
             }
         }
     }
