@@ -1,67 +1,72 @@
 <template>
     <div class="container">
-        <h1>Willkommen</h1>
-            <b-input-group size="lg" prepend="Freie Suche:">
-                <b-form-input v-model.trim="searchQuery" v-on:keyup.enter="getResults" placeholder="Suchbegriffe eingeben und mit Enter bestätigen ..."></b-form-input>
-                <b-input-group-append>
-                    <b-btn v-b-toggle.options v-b-tooltip.hover title="Legen Sie Zeitraum und Ort fest" variant="secondary">⚙ Optionen</b-btn>
-                </b-input-group-append>
-            </b-input-group>
+        <h1>Willkommen zur Polizeiberichtsuche Berlin</h1>
+        <b-input-group size="lg" prepend="Freie Suche:">
+            <b-form-input v-model.trim="searchQuery" v-on:keyup.enter="getResults"
+                          placeholder="Suchbegriffe eingeben ..."></b-form-input>
+            <b-input-group-append>
+                <b-btn v-b-toggle.options v-b-tooltip.hover title="Legen Sie Zeitraum und Ort fest" variant="secondary">
+                    ⚙ Optionen
+                </b-btn>
+            </b-input-group-append>
+        </b-input-group>
         <b-collapse id="options" class="mt-2">
-        <b-card bg-variant="light">
-        <b-form-group horizontal
-                       breakpoint="lg"
-                       label="Optionen"
-                       label-size="lg"
-                       label-class="font-weight-bold pt-0"
-                       class="mb-0">
-                <b-input-group>
-                    <b-input-group-prepend is-text>
-                        <input class="mr-sm-2" type="checkbox" v-model="fromActive"> Von:
-                    </b-input-group-prepend>
-                    <b-form-input class="mb-2 mr-sm-2 mb-sm-0"
-                                  v-model="fromDate"
-                                  type="date"
-                                  :state="fromDateState"
-                                  :readonly="!fromActive"
-                                  id="selectFromDate"
-                                  aria-describedby="fromDateLiveFeedback"
-                    ></b-form-input>
-                    <b-form-invalid-feedback id="fromDateLiveFeedback">
-                        Bitte ein valides Datum eingeben.
-                    </b-form-invalid-feedback>
-                </b-input-group>
-                <b-input-group class="mt-2">
-                    <b-input-group-prepend is-text>
-                        <input class="mr-sm-2" type="checkbox" v-model="toActive"> Bis:
-                    </b-input-group-prepend>
-                    <b-form-input class="mb-2 mr-sm-2 mb-sm-0"
-                                  v-model="toDate"
-                                  type="date"
-                                  :readonly="!toActive"
-                                  :state="toDateState"
-                                  id="selectFromDate"
-                                  aria-describedby="toDateLiveFeedback"
-                    ></b-form-input>
-                    <b-form-invalid-feedback id="toDateLiveFeedback">
-                        Bitte ein valides Datum eingeben.
-                    </b-form-invalid-feedback>
-                </b-input-group>
-            <b-form-group class="mt-2" label="Bezirke:">
-                <b-form-checkbox-group id="districts" name="districts" v-model="selectedDistricts" :options="districts">
-                </b-form-checkbox-group>
-            </b-form-group>
-            </b-form-group>
-        </b-card>
+            <b-card bg-variant="light">
+                <b-form-group horizontal
+                              breakpoint="lg"
+                              label="Optionen"
+                              label-size="lg"
+                              label-class="font-weight-bold pt-0"
+                              class="mb-0">
+                    <b-input-group>
+                        <b-input-group-prepend is-text>
+                            <input class="mr-sm-2" type="checkbox" v-model="fromActive"> Von:
+                        </b-input-group-prepend>
+                        <b-form-input class="mb-2 mr-sm-2 mb-sm-0"
+                                      v-model="fromDate"
+                                      type="date"
+                                      :state="fromDateState"
+                                      :readonly="!fromActive"
+                                      id="selectFromDate"
+                                      aria-describedby="fromDateLiveFeedback"
+                        ></b-form-input>
+                        <b-form-invalid-feedback id="fromDateLiveFeedback">
+                            Bitte ein valides Datum eingeben.
+                        </b-form-invalid-feedback>
+                    </b-input-group>
+                    <b-input-group class="mt-2">
+                        <b-input-group-prepend is-text>
+                            <input class="mr-sm-2" type="checkbox" v-model="toActive"> Bis:
+                        </b-input-group-prepend>
+                        <b-form-input class="mb-2 mr-sm-2 mb-sm-0"
+                                      v-model="toDate"
+                                      type="date"
+                                      :readonly="!toActive"
+                                      :state="toDateState"
+                                      id="selectFromDate"
+                                      aria-describedby="toDateLiveFeedback"
+                        ></b-form-input>
+                        <b-form-invalid-feedback id="toDateLiveFeedback">
+                            Bitte ein valides Datum eingeben.
+                        </b-form-invalid-feedback>
+                    </b-input-group>
+                    <b-form-group class="mt-2" label="Bezirke:">
+                        <b-form-checkbox-group id="districts" name="districts" v-model="selectedDistricts"
+                                               :options="districts">
+                        </b-form-checkbox-group>
+                    </b-form-group>
+                </b-form-group>
+            </b-card>
         </b-collapse>
-            <b-button class="mt-2" size="lg" variant="primary" @click="getResults">
-                🔎 Suchen
-            </b-button>
-            <ul class="mt-3 pl-2 pr-2 pt-2 pb-2" style="list-style-type: none;">
-                <li v-for="result in results" class="mb-2">
-                    <SearchResult :result="result"></SearchResult>
-                </li>
-            </ul>
+        <b-button class="mt-2" size="lg" variant="primary" @click="getResults">
+            🔎 Suchen
+        </b-button>
+        {{fullQuery}}
+        <ul class="mt-3 pl-2 pr-2 pt-2 pb-2" style="list-style-type: none;">
+            <li v-for="result in results" class="mb-2">
+                <SearchResult :result="result"></SearchResult>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -75,10 +80,10 @@
             SearchResult: SearchResult
         },
         computed: {
-            fromDateState () {
+            fromDateState() {
                 return this.fromActive ? /^[0-9]{4}.[0-9]{2}.[0-9]{2}$/.test(this.fromDate) : null
             },
-            toDateState () {
+            toDateState() {
                 return this.toActive ? /^[0-9]{4}.[0-9]{2}.[0-9]{2}$/.test(this.toDate) : null
             }
         },
@@ -93,7 +98,7 @@
                 districts: ['Charlottenburg', 'Mitte', 'Grunewald', 'Friedrichshain'],
                 selectedDistricts: [],
                 searchQuery: '',
-                fullQuery: 'bepis',
+                fullQuery: '',
                 results: [
                     {
                         title: 'Mercedes brannte',
@@ -115,25 +120,17 @@
             }
         },
         methods: {
-            isEmpty(str) {
-                return (!str || 0 === str.length);
-            },
-            buildFullQuery() {
-                if(!isEmpty(this.searchQuery)) {
-                    this.fullQuery = 'q=' + this.searchQuery;
-                }
-                if(!isEmpty(this.fromDate)) {
-                    this.fullQuery += 'from=' + this.fromDate
-                }
-                if(!isEmpty(this.toDate)) {
-                    this.fullQuery += 'to=' + this.toDate
-                }
-                if(this.selectedDistricts.length > 0) {
-                    this.fullQuery += 'districts=' + this.selectedDistricts
-                }
-            },
-            getResults () {
-                buildFullQuery()
+            getResults() {
+
+                let isEmpty = (str) => {
+                    return ;
+                };
+
+                this.fullQuery = !(!this.searchQuery || 0 === this.searchQuery.length)? 'q=' + this.searchQuery.split(' ').join('+') : '';
+                this.fullQuery += this.fromDateState ? ('from=' + this.fromDate + '&') : '';
+                this.fullQuery += this.toDateState ? ('from=' + this.toDate + '&') : '';
+                this.fullQuery += this.selectedDistricts.length > 0? ('districts=' + this.selectedDistricts): ''
+
             }
         }
     }
