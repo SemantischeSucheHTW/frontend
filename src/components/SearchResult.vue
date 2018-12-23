@@ -2,7 +2,11 @@
     <div>
         <b-card :title="result.title"
                 :sub-title="result.date + ' - ' + result.district">
-            <p class="card-text">
+            <p v-show="collapsed" class="card-text">
+                {{result.text.substring(0, 140)}}
+                <b-link v-on:click="collapsed = false" style="font-style: italic" href="#">... show more</b-link>
+            </p>
+            <p v-show="!collapsed" class="card-text">
                 {{result.text}}
             </p>
             <b-link target="_blank" :href="result.link"
@@ -16,7 +20,12 @@
         name: 'SearchResult',
         props: [
             'result'
-        ]
+        ],
+        data () {
+            return {
+                collapsed: true
+            }
+        }
     }
 </script>
 
