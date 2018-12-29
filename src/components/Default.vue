@@ -100,7 +100,7 @@
                 districts: ['Charlottenburg', 'Mitte', 'Grunewald', 'Friedrichshain'],
                 selectedDistricts: [],
                 searchQuery: '',
-                fullQuery: '',
+                fullQuery: new URLSearchParams(),
                 error: false,
                 results: [
                     {
@@ -125,16 +125,21 @@
         methods: {
             getResults() {
 
-                this.fullQuery = !(!this.searchQuery || 0 === this.searchQuery.length)? 'q=' + this.searchQuery.split(' ').join('+') : '';
-                this.fullQuery += this.fromDateState ? ('from=' + this.fromDate + '&') : '';
-                this.fullQuery += this.toDateState ? ('from=' + this.toDate + '&') : '';
-                this.fullQuery += this.selectedDistricts.length > 0? ('districts=' + this.selectedDistricts): '';
+                if(!(!this.searchQuery || 0 === this.searchQuery.length))
+                    this.fullQuery.append('q', this.searchQuery.split(' ').join('+'));
 
-                if((this.fullQuery.length === 0)) {
-                    return;
-                }
+                if(this.fromDateState)
+                    this.fullQuery.append('from', this.fromDate);
 
-                http.get('/search?' + this.fullQuery).then(response => {
+                if(this.toDateState)
+                    this.fullQuery.append('to', this.toDate);
+
+                if(this.selectedDistricts.length > 0)
+                    this.fullQuery.append('districts', this.selectedDistricts.join(','));
+
+                http.get('/search', {
+                    params: this.fullQuery
+                }).then(response => {
                     this.error = false;
                     this.results = response.data;
                 }).catch(error => {
