@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 axios.interceptors.request.use(config => {
-    const baseUrl = "http://abteilung6.com:5000";
+    const baseUrl = process.env.VUE_APP_BASE_URL;
     config.baseURL = baseUrl;
     return config;
 });
