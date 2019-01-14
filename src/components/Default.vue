@@ -6,7 +6,7 @@
                           placeholder="Suchbegriffe eingeben ..."></b-form-input>
             <b-input-group-append>
                 <b-btn v-b-toggle.options v-b-tooltip.hover title="Legen Sie Zeitraum und Ort fest" variant="secondary">
-                    ⚙ Optionen
+                    ⚙ Suche eingrenzen
                 </b-btn>
             </b-input-group-append>
         </b-input-group>
@@ -14,7 +14,7 @@
             <b-card bg-variant="light">
                 <b-form-group horizontal
                               breakpoint="lg"
-                              label="Optionen"
+                              label="Suche eingrenzen"
                               label-size="lg"
                               label-class="font-weight-bold pt-0"
                               class="mb-0">
@@ -66,7 +66,7 @@
                 <SearchResult :result="result"></SearchResult>
             </li>
         </ul>
-        <b-alert :show="error" dismissible variant="danger">
+        <b-alert :show="!(!error)" dismissible variant="danger">
             {{error}}
         </b-alert>
     </div>
@@ -137,7 +137,7 @@
                 if(this.selectedDistricts.length > 0)
                     this.fullQuery.append('districts', this.selectedDistricts.join(','));
 
-                http.get('/search', {
+                http.get('/report', {
                     params: this.fullQuery
                 }).then(response => {
                     this.error = false;
