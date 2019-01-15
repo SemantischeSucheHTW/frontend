@@ -175,7 +175,7 @@
                     this.fullQuery.append('to', this.toDate);
 
                 if (this.selectedDistricts.length > 0)
-                    this.fullQuery.append('districts', this.selectedDistricts.join(','));
+                    this.fullQuery.append('districts', this.selectedDistricts.join('+'));
 
                 http.get(process.env.VUE_APP_REPORTS_BASE_URL, {
                     params: this.fullQuery
