@@ -2,8 +2,9 @@
     <div class="container">
         <h1>Willkommen zur Polizeiberichtsuche Berlin</h1>
         <b-input-group size="lg" prepend="Freie Suche:">
-            <b-form-input v-model.trim="searchQuery" v-on:keyup.enter="getResults"
-                          placeholder="Suchbegriffe eingeben ..."></b-form-input>
+            <b-form-input v-model.trim="searchQuery"
+                          placeholder="Suchbegriffe eingeben ..."
+            ></b-form-input>
             <b-input-group-append>
                 <b-btn v-b-toggle.options v-b-tooltip.hover title="Legen Sie Zeitraum und Ort fest" variant="secondary">
                     ⚙ Suche eingrenzen
@@ -58,6 +59,16 @@
                 </b-form-group>
             </b-card>
         </b-collapse>
+        <div class="mt-2 mb-2" v-if="activeCorrections.length > 0">
+            <h5>Rechtschreibkorrektur:</h5>
+            <ul v-for="correction in activeCorrections" style="list-style-type: none;" class="mb-0">
+                <li v-for="suggestion in correction.suggestions">
+                    <b-link v-on:click="applyCorrection(correction.word, suggestion)">
+                        {{correction.word}} → {{suggestion}}
+                    </b-link>
+                </li>
+            </ul>
+        </div>
         <b-button class="mt-2" size="lg" variant="primary" @click="getResults">
             🔎 Suchen
         </b-button>
@@ -87,6 +98,9 @@
             },
             toDateState() {
                 return this.toActive ? /^[0-9]{4}.[0-9]{2}.[0-9]{2}$/.test(this.toDate) : null
+            },
+            activeCorrections() {
+                return this.corrections.filter(value => this.searchQuery.includes(value.word));
             }
         },
         data() {
@@ -119,22 +133,32 @@
                         text: 'In der vergangenen Nacht stach ein Mann in Marzahn auf zwei ihm bekannte Männer ein und verletzte den einen lebensgefährlich und den anderen schwer. Nach derzeitigem Ermittlungsstand geschah die Tat gegen 0.35 Uhr in einem Hauseingangsbereich eines Wohnhauses in der Wörlitzer Straße. Der Täter flüchtete anschließend. Die beiden Verletzten, ein 37- und ein 38-Jähriger, kamen mit alarmierten Rettungswagen in ein Krankenhaus, wo sie zur Behandlung stationär aufgenommen werden mussten. Der Jüngere schwebt immer noch in Lebensgefahr.\nWeitere Ermittlungen führten auf die Spur eines dringend Tatverdächtigen im Alter von 32 Jahren, der heute Vormittag durch ein Spezialeinsatzkommando an seiner Aufenthaltsanschrift in der Wörlitzer Straße festgenommen wurde. Die weiteren Ermittlungen der 5. Mordkommission dauern an.',
                         link: 'https://www.berlin.de/polizei/polizeimeldungen/pressemitteilung.769785.php'
                     }
+                ],
+                corrections: [
+                    {
+                        word: 'was',
+                        suggestions: ['das', 'krass']
+                    },
+                    {
+                        word: 'geht',
+                        suggestions: ['gehen']
+                    }
                 ]
             }
         },
         methods: {
             getResults() {
 
-                if(!(!this.searchQuery || 0 === this.searchQuery.length))
+                if (!(!this.searchQuery || 0 === this.searchQuery.length))
                     this.fullQuery.append('q', this.searchQuery.split(' ').join('+'));
 
-                if(this.fromDateState)
+                if (this.fromDateState)
                     this.fullQuery.append('from', this.fromDate);
 
-                if(this.toDateState)
+                if (this.toDateState)
                     this.fullQuery.append('to', this.toDate);
 
-                if(this.selectedDistricts.length > 0)
+                if (this.selectedDistricts.length > 0)
                     this.fullQuery.append('districts', this.selectedDistricts.join(','));
 
                 http.get('/report', {
@@ -145,6 +169,18 @@
                 }).catch(error => {
                     this.error = error;
                 })
+            },
+            getCorrections() {
+
+            },
+            applyCorrection(word, correction) {
+                this.searchQuery = this.searchQuery.replace(word, correction);
+            }
+        },
+        watch: {
+            searchQuery: function () {
+                this.getResults();
+                this.getCorrections();
             }
         }
     }
