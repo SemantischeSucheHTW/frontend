@@ -161,7 +161,7 @@
                 if (this.selectedDistricts.length > 0)
                     this.fullQuery.append('districts', this.selectedDistricts.join(','));
 
-                http.get('/report', {
+                http.get('/reports', {
                     params: this.fullQuery
                 }).then(response => {
                     this.error = false;
