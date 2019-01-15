@@ -63,7 +63,7 @@
             <h5>Rechtschreibkorrektur:</h5>
             <ul v-for="correction in activeCorrections" style="list-style-type: none;" class="mb-0">
                 <li v-for="suggestion in correction.suggestions">
-                    <b-link v-on:click="applyCorrection(correction.word, suggestion)">
+                    <b-link v-b-tooltip.hover title="übernehmen" v-on:click="applyCorrection(correction.word, suggestion)">
                         {{correction.word}} → {{suggestion}}
                     </b-link>
                 </li>
@@ -84,7 +84,7 @@
 </template>
 
 <script>
-    import http from './../core/http';
+    import http from '../core/http';
     import SearchResult from '@/components/SearchResult.vue'
 
     export default {
