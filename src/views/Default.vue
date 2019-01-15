@@ -100,7 +100,7 @@
                 return this.toActive ? /^[0-9]{4}.[0-9]{2}.[0-9]{2}$/.test(this.toDate) : null
             },
             activeCorrections() {
-                return this.corrections.filter(value => this.queryText.includes(value.word));
+                return this.corrections.filter(value => this.queryText.toLowerCase().includes(value.word));
             }
         },
         data() {
@@ -193,7 +193,7 @@
                 });
             },
             applyCorrection(word, correction) {
-                this.queryText = this.queryText.replace(word, correction);
+                this.queryText = this.queryText.toLowerCase().replace(word, correction);
             }
         },
         watch: {
