@@ -163,6 +163,8 @@
         methods: {
             getReports() {
 
+                this.fullQuery = new URLSearchParams();
+
                 if (!(!this.queryText || 0 === this.queryText.length))
                     this.fullQuery.append('q', this.queryText.split(' ').join('+'));
 
