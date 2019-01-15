@@ -2,7 +2,7 @@
     <div class="container">
         <h1>Willkommen zur Polizeiberichtsuche Berlin</h1>
         <b-input-group size="lg" prepend="Freie Suche:">
-            <b-form-input v-model.trim="searchQuery"
+            <b-form-input v-model.trim="queryText"
                           placeholder="Suchbegriffe eingeben ..."
             ></b-form-input>
             <b-input-group-append>
@@ -100,7 +100,7 @@
                 return this.toActive ? /^[0-9]{4}.[0-9]{2}.[0-9]{2}$/.test(this.toDate) : null
             },
             activeCorrections() {
-                return this.corrections.filter(value => this.searchQuery.includes(value.word));
+                return this.corrections.filter(value => this.queryText.includes(value.word));
             }
         },
         data() {
@@ -111,9 +111,23 @@
                 fromActive: false,
                 toDate: 'dd.mm.yyyy',
                 toActive: false,
-                districts: ['Charlottenburg', 'Mitte', 'Grunewald', 'Friedrichshain'],
+                districts: ['Charlottenburg-Wilmersdorf',
+                    'Friedrichshain-Kreuzberg',
+                    'Lichtenberg',
+                    'Marzahn-Hellersdorf',
+                    'Mitte',
+                    'Neukölln',
+                    'Pankow',
+                    'Reinickendorf',
+                    'Spandau',
+                    'Steglitz-Zehlendorf',
+                    'Tempelhof-Schöneberg',
+                    'Treptow-Köpenick',
+                    'berlinweit',
+                    'bezirksübergreifend',
+                    'bundesweit'],
                 selectedDistricts: [],
-                searchQuery: '',
+                queryText: '',
                 fullQuery: new URLSearchParams(),
                 error: false,
                 results: [
@@ -149,8 +163,8 @@
         methods: {
             getResults() {
 
-                if (!(!this.searchQuery || 0 === this.searchQuery.length))
-                    this.fullQuery.append('q', this.searchQuery.split(' ').join('+'));
+                if (!(!this.queryText || 0 === this.queryText.length))
+                    this.fullQuery.append('q', this.queryText.split(' ').join('+'));
 
                 if (this.fromDateState)
                     this.fullQuery.append('from', this.fromDate);
@@ -171,7 +185,7 @@
                 });
             },
             getCorrections() {
-                http.get('/corrections?query=' + this.searchQuery.split(' ').join('+'))
+                http.get('/corrections?query=' + this.queryText.split(' ').join('+'))
                     .then(response => {
                         this.corrections = response.data;
                     }).catch(error => {
@@ -179,11 +193,11 @@
                 });
             },
             applyCorrection(word, correction) {
-                this.searchQuery = this.searchQuery.replace(word, correction);
+                this.queryText = this.queryText.replace(word, correction);
             }
         },
         watch: {
-            searchQuery: function () {
+            queryText: function () {
                 this.getResults();
                 this.getCorrections();
             }
