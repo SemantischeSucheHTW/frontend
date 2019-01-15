@@ -69,7 +69,7 @@
                 </li>
             </ul>
         </div>
-        <b-button class="mt-2" size="lg" variant="primary" @click="getResults">
+        <b-button class="mt-2" size="lg" variant="primary" @click="getReports">
             🔎 Suchen
         </b-button>
         <ul v-if="results.length > 0" class="mt-3 pl-2 pr-2 pt-2 pb-2" style="list-style-type: none;">
@@ -161,7 +161,7 @@
             }
         },
         methods: {
-            getResults() {
+            getReports() {
 
                 if (!(!this.queryText || 0 === this.queryText.length))
                     this.fullQuery.append('q', this.queryText.split(' ').join('+'));
@@ -175,7 +175,7 @@
                 if (this.selectedDistricts.length > 0)
                     this.fullQuery.append('districts', this.selectedDistricts.join(','));
 
-                http.get('/reports', {
+                http.get(process.env.VUE_APP_REPORTS_BASE_URL, {
                     params: this.fullQuery
                 }).then(response => {
                     this.error = false;
@@ -185,7 +185,7 @@
                 });
             },
             getCorrections() {
-                http.get('/corrections?query=' + this.queryText.split(' ').join('+'))
+                http.get(process.env.VUE_APP_CORRECTIONS_BASE_URL + '?query=' + this.queryText.split(' ').join('+'))
                     .then(response => {
                         this.corrections = response.data;
                     }).catch(error => {
@@ -198,7 +198,7 @@
         },
         watch: {
             queryText: function () {
-                this.getResults();
+                this.getReports();
                 this.getCorrections();
             }
         }
