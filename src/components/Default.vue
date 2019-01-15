@@ -168,10 +168,15 @@
                     this.results = response.data;
                 }).catch(error => {
                     this.error = error;
-                })
+                });
             },
             getCorrections() {
-
+                http.get('/corrections?query=' + this.searchQuery.split(' ').join('+'))
+                    .then(response => {
+                        this.corrections = response.data;
+                    }).catch(error => {
+                        this.error = error
+                });
             },
             applyCorrection(word, correction) {
                 this.searchQuery = this.searchQuery.replace(word, correction);
