@@ -59,7 +59,7 @@
                 </b-form-group>
             </b-card>
         </b-collapse>
-        <div class="mt-2 mb-2" v-if="activeCorrections.length > 0">
+        <div class="mt-2 mb-2" v-show="activeCorrections.length > 0">
             <h5>Rechtschreibkorrektur:</h5>
             <ul v-for="correction in activeCorrections" style="list-style-type: none;" class="mb-0">
                 <li v-for="suggestion in correction.suggestions">
