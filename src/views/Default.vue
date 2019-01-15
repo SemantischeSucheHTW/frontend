@@ -131,22 +131,6 @@
                 fullQuery: new URLSearchParams(),
                 error: false,
                 results: [
-                    {
-                        title: 'Mercedes brannte',
-                        date: '22.12.2018',
-                        district: 'Treptow-Köpenick',
-                        number: '2676',
-                        text: 'Heute früh brannte in Baumschulenweg ein Mercedes. Gegen 3.20 Uhr wurden Polizei und Feuerwehr zu dem brennenden Wagen auf einem Feld in der Neuen Späthstraße alarmiert. Brandbekämpfer löschten die Flammen. Der Pkw brannte komplett aus. Die Ermittlungen hat ein Brandkommissariat beim Landeskriminalamt Berlin übernommen.',
-                        link: 'https://www.berlin.de/polizei/polizeimeldungen/pressemitteilung.769783.php'
-                    },
-                    {
-                        title: 'Auf Männer eingestochen - Festnahme',
-                        date: '22.12.2018',
-                        district: 'Marzahn-Hellersdorf',
-                        number: '2678',
-                        text: 'In der vergangenen Nacht stach ein Mann in Marzahn auf zwei ihm bekannte Männer ein und verletzte den einen lebensgefährlich und den anderen schwer. Nach derzeitigem Ermittlungsstand geschah die Tat gegen 0.35 Uhr in einem Hauseingangsbereich eines Wohnhauses in der Wörlitzer Straße. Der Täter flüchtete anschließend. Die beiden Verletzten, ein 37- und ein 38-Jähriger, kamen mit alarmierten Rettungswagen in ein Krankenhaus, wo sie zur Behandlung stationär aufgenommen werden mussten. Der Jüngere schwebt immer noch in Lebensgefahr.\nWeitere Ermittlungen führten auf die Spur eines dringend Tatverdächtigen im Alter von 32 Jahren, der heute Vormittag durch ein Spezialeinsatzkommando an seiner Aufenthaltsanschrift in der Wörlitzer Straße festgenommen wurde. Die weiteren Ermittlungen der 5. Mordkommission dauern an.',
-                        link: 'https://www.berlin.de/polizei/polizeimeldungen/pressemitteilung.769785.php'
-                    }
                 ],
                 corrections: [
                     {
@@ -202,6 +186,15 @@
             queryText: function () {
                 this.getReports();
                 this.getCorrections();
+            },
+            fromDate: function () {
+                this.getReports();
+            },
+            toDate: function () {
+                this.getReports();
+            },
+            selectedDistricts: function () {
+                this.getReports();
             }
         }
     }
