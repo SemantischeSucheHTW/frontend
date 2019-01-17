@@ -104,8 +104,6 @@
             }
         },
         data() {
-            const now = new Date();
-            const nowFormatted = now.getUTCFullYear() + '-' + (now.getUTCMonth() + 1 < 10 ? '0' + (now.getUTCMonth() + 1) : (now.getUTCMonth()) + 1) + '-' + now.getUTCDate();
             return {
                 fromDate: 'dd.mm.yyyy',
                 fromActive: false,
@@ -152,8 +150,14 @@
                 if (!(!this.queryText || 0 === this.queryText.length))
                     this.fullQuery.append('q', this.queryText.split(' ').join('+'));
 
-                if (this.fromDateState)
+                if (this.fromDateState) {
                     this.fullQuery.append('from', this.fromDate);
+                    if(!this.toDateState) {
+                        const now = new Date();
+                        const nowFormatted = now.getUTCFullYear() + '-' + (now.getUTCMonth() + 1 < 10 ? '0' + (now.getUTCMonth() + 1) : (now.getUTCMonth()) + 1) + '-' + now.getUTCDate();
+                        this.fullQuery.append('to', nowFormatted)
+                    }
+                }
 
                 if (this.toDateState)
                     this.fullQuery.append('to', this.toDate);
