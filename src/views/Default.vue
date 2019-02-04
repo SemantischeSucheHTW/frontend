@@ -217,6 +217,9 @@
             },
             selectedDistricts: function () {
                 this.getReports();
+            },
+            selectedSortAlgo: function () {
+                this.getReports();
             }
         }
     }
