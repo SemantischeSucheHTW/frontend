@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <b-container class="container">
         <h1>Willkommen zur Polizeiberichtsuche Berlin</h1>
         <b-input-group size="lg" prepend="Freie Suche:">
             <b-form-input v-model.trim="queryText"
@@ -69,9 +69,20 @@
                 </li>
             </ul>
         </div>
-        <b-button class="mt-2" size="lg" variant="primary" @click="getReports">
-            🔎 Suchen
-        </b-button>
+        <b-row class="mt-2">
+            <b-col>
+                <b-button size="lg" variant="primary" @click="getReports">
+                    🔎 Suchen
+                </b-button>
+            </b-col>
+            <b-col style="text-align: right">
+                <b-form-group class="pt-2">
+                    <b-form-radio-group id="sortAlgo" name="sortAlgo" v-model="selectedSortAlgo"
+                                        :options="sortAlgo">
+                    </b-form-radio-group>
+                </b-form-group>
+            </b-col>
+        </b-row>
         <ul v-if="results.length > 0" class="mt-3 pl-2 pr-2 pt-2 pb-2" style="list-style-type: none;">
             <li v-for="result in results" class="mb-2">
                 <SearchResult :result="result"></SearchResult>
@@ -80,7 +91,7 @@
         <b-alert :show="!(!error)" dismissible variant="danger">
             {{error}}
         </b-alert>
-    </div>
+    </b-container>
 </template>
 
 <script>
@@ -125,6 +136,11 @@
                     'bezirksübergreifend',
                     'bundesweit'],
                 selectedDistricts: [],
+                sortAlgo: [
+                    {text: 'Word 2 Vec', value: 'w2v'},
+                    {text: 'TF-IDF', value: 'tfidf'}
+                ],
+                selectedSortAlgo: 'w2v',
                 queryText: '',
                 fullQuery: new URLSearchParams(),
                 error: false,
@@ -146,6 +162,8 @@
             getReports() {
 
                 this.fullQuery = new URLSearchParams();
+
+                this.fullQuery.append('sortAlg', this.selectedSortAlgo);
 
                 if (!(!this.queryText || 0 === this.queryText.length))
                     this.fullQuery.append('q', this.queryText.split(' ').join('+'));
