@@ -4,7 +4,7 @@
                 :sub-title="result.date + ' - ' + result.district">
             <p v-show="collapsed" class="card-text">
                 {{result.text.substring(0, 140)}}
-                <b-link v-on:click="collapsed = false" style="font-style: italic" href="#">... show more</b-link>
+                <b-link v-on:click="collapsed = false" style="font-style: italic" href="#">... mehr anzeigen</b-link>
             </p>
             <p v-show="!collapsed" class="card-text">
                 {{result.text}}
