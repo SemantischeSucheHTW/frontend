@@ -225,7 +225,7 @@
     }
 </script>
 
-<style scoped="true">
+<style>
     .container {
         margin-top: 30px;
     }
